@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camiones Hormigoneras</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: courirer;
+            background-color: #ecf0f1;
+            color: #34495e;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #6f6f6f; /* Gris oscuro elegante */
+            padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Logo */
+        .navbar-brand img {
+            max-height: 50px;
+            margin-right: 10px;
+        }
+        
+        /* Links */
+        .nav-link {
+            color: white !important;
+            font-size: 1.1rem;
+            padding: 10px 15px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 25px;
+        }
+        
+        .nav-link:hover {
+            background-color: #007bff;
+            color: white !important;
+        }
+        
+        /* Dropdown de vehículos */
+        .navbar-select {
+            width: auto;
+            min-width: 200px;
+            margin-right: 10px;
+            border-radius: 20px;
+        }
+        
+        .navbar-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+        
+        /* Botones */
+        .navbar .btn {
+            border-radius: 20px;
+            padding: 5px 15px;
+        }
+        
+        /* Búsqueda */
+        .navbar-search {
+            width: 250px;
+            border-radius: 20px;
+            padding: 5px 15px;
+        }
+        
+        /* Ajustes de la estructura */
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+        }
+
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            gap: 30px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            margin-bottom: 20px;
+            padding: 10px 0;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .breadcrumb a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .breadcrumb a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        /* Estilos para la barra de filtros */
+        .filters {
+            width: 30%;
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 20px;
+        }
+        .filters h2 {
+            font-size: 1.6em;
+            margin-bottom: 15px;
+            color: #2980b9;
+            font-weight: 700;
+        }
+        .filters label {
+            display: block;
+            margin-top: 25px;
+            font-weight: 500;
+            color: #34495e;
+        }
+        .filters input[type="checkbox"] {
+            margin-right: 8px;
+            accent-color: #2980b9;
+        }
+        .filters input[type="range"] {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .filters .price-range {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Estilos para la lista de vehículos */
+        .vehicle-list {
+            width: 75%;
+            list-style: none;
+            padding: 0;
+        }
+        .vehicle-item {
+            background-color: #ffffff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s;
+        }
+        .vehicle-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .vehicle-image {
+            width: 150px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .vehicle-details {
+            flex: 1;
+        }
+        .vehicle-name {
+            font-size: 1.4em;
+            color: #2980b9;
+            font-weight: 700;
+        }
+        .vehicle-specs {
+            color: #7f8c8d;
+            margin: 5px 0;
+        }
+        .vehicle-price {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 1.2em;
+        }
+        .add-to-cart-btn {
+            padding: 10px 20px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .add-to-cart-btn:hover {
+            background-color: #1f639a;
+        }
+
+        /* Estilos del carrito */
+        .cart {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2980b9;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+        .cart:hover {
+            background-color: #1f639a;
+        }
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-weight: bold;
+        }
+
+        /* Estilos del carrito desplegado */
+        .cart-items {
+            position: fixed;
+            top: 50px;
+            right: 20px;
+            width: 300px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 100;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .cart-item .item-name {
+            font-weight: bold;
+        }
+        .checkout-btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 5px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .checkout-btn:hover {
+            background-color: #2ecc71;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="{% url 'index' %}">Inicio</a> &gt; 
+        <a href="{% url 'vehiculo-list' %}">Vehículos</a> &gt; 
+        <span>Hormigoneras</span>
+    </div>
+    
+
+    <div class="container">
+        <!-- Filtros -->
+        <aside class="filters">
+            <h2>Filtros</h2>
+            <label>Marca:</label>
+            <input type="checkbox" id="scania" onclick="filterVehicles()"> Scania<br>
+            <input type="checkbox" id="renault" onclick="filterVehicles()"> Renault<br>
+            <input type="checkbox" id="volvo" onclick="filterVehicles()"> Volvo<br>
+            <input type="checkbox" id="daf" onclick="filterVehicles()"> DAF<br>
+            
+            <label>Caja de Cambios:</label>
+            <input type="checkbox" id="automatica" onclick="filterVehicles()"> Automática<br>
+            <input type="checkbox" id="manual" onclick="filterVehicles()"> Manual<br>
+
+            <div class="price-range">
+                <label for="priceRange">Rango de Precio:</label>
+                <input type="range" id="priceRange" min="0" max="100000" step="1000" value="100000" onchange="filterVehicles()">
+                <span id="priceValue">100,000 €</span>
+            </div>
+        </aside>
+
+        <!-- Lista de vehículos -->
+        <ul class="vehicle-list" id="vehicleList">
+            {% load static %}
+            <li class="vehicle-item" data-marca="renault" data-transmision="Automática" data-precio="18500">
+                <img src="{% static 'img/hm1.png' %}" alt="renault" class="vehicle-image">
+                <div class="vehicle-details">
+                    <div class="vehicle-name">Renault Baryval</div>
+                    <div class="vehicle-specs">Año: 2013 | Transmisión: Automática</div>
+                    <div class="vehicle-price">18.500 €</div><br>
+                    <button class="add-to-cart-btn" onclick="addToCart('Camión Hormigonera Renault', 18500)">Añadir al carrito</button>
+                </div>
+            </li>
+            <li class="vehicle-item" data-marca="DAF" data-transmision="Automática" data-precio="20000">
+                <img src="{% static 'img/hm2.png' %}" alt="DAF" class="vehicle-image">
+                <div class="vehicle-details">
+                    <div class="vehicle-name">DAF LIEBHERR</div>
+                    <div class="vehicle-specs">Año: 2015 | Transmisión: Automática</div>
+                    <div class="vehicle-price">20.000 €</div><br>
+                    <button class="add-to-cart-btn" onclick="addToCart('Camión Hormigonera DAF', 20000)">Añadir al carrito</button>
+                </div>
+            </li>
+            <li class="vehicle-item" data-marca="volvo" data-transmision="Manual" data-precio="54900">
+                <img src="{% static 'img/hm3.png' %}" alt="volvo" class="vehicle-image">
+                <div class="vehicle-details">
+                    <div class="vehicle-name">Volvo FMX 370</div>
+                    <div class="vehicle-specs">Año: 2016 | Transmisión: Manual</div>
+                    <div class="vehicle-price">54.900€</div><br>
+                    <button class="add-to-cart-btn" onclick="addToCart('Camión Hormigonera Volvo', 54900)">Añadir al carrito</button>
+                </div>
+            </li>
+            <li class="vehicle-item" data-marca="scania" data-transmision="Manual" data-precio="99800">
+                <img src="{% static 'img/hm4.png' %}" alt="scania" class="vehicle-image">
+                <div class="vehicle-details">
+                    <div class="vehicle-name">Scania P380</div>
+                    <div class="vehicle-specs">Año: 2019 | Transmisión: Manual</div>
+                    <div class="vehicle-price">99.800 €</div><br>
+                    <button class="add-to-cart-btn" onclick="addToCart('Camión Hormigonera Scania', 99800)">Añadir al carrito</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+   <!-- Carrito de compras -->
+   <div id="cart" class="cart" onclick="toggleCart()">
+    Carrito
+    <span class="cart-count" id="cartCount">0</span>
+    </div>
+
+    <!-- Items del carrito -->
+    <div id="cart-items" class="cart-items">
+        <h3>Artículos en el carrito</h3>
+        <ul id="cart-items-list"></ul>
+        <button class="checkout-btn" onclick="checkout()">Proceder al pago</button>
+    </div>
+
+<script>
+    let cart = [];
+
+    function addToCart(name, price) {
+        cart.push({ name, price });
+        updateCart();
+    }
+
+    function updateCart() {
+        const cartItemsList = document.getElementById('cart-items-list');
+        cartItemsList.innerHTML = '';
+
+        cart.forEach(item => {
+            let li = document.createElement('li');
+            li.textContent = `${item.name} - ${item.price} €`;
+            cartItemsList.appendChild(li);
+        });
+
+        let cartButton = document.getElementById('cart');
+        cartButton.textContent = `Carrito (${cart.length})`;
+    }
+
+    function toggleCart() {
+        let cartItems = document.getElementById('cart-items');
+        cartItems.style.display = cartItems.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function checkout() {
+        alert('Procediendo al pago');
+    }
+
+    function filterVehicles() {
+        let vehicles = document.querySelectorAll('.vehicle-item');
+        let selectedBrand = [];
+        let selectedTransmission = [];
+        let priceLimit = parseFloat(document.getElementById('priceRange').value) || 0;
+        let priceText = document.getElementById('priceValue');
+        priceText.textContent = `${priceLimit} €`;
+    
+        // Obtener marcas seleccionadas (corregido)
+        if (document.getElementById('scania').checked) selectedBrand.push('scania');
+        if (document.getElementById('renault').checked) selectedBrand.push('renault');
+        if (document.getElementById('volvo').checked) selectedBrand.push('volvo');
+        if (document.getElementById('daf').checked) selectedBrand.push('daf');
+    
+        // Obtener transmisiones seleccionadas
+        if (document.getElementById('automatica').checked) selectedTransmission.push('Automática');
+        if (document.getElementById('manual').checked) selectedTransmission.push('Manual');
+    
+        vehicles.forEach(vehicle => {
+            let brand = (vehicle.getAttribute('data-marca') || "").trim().toLowerCase();
+            let transmission = (vehicle.getAttribute('data-transmision') || "").trim();
+            let price = parseFloat(vehicle.getAttribute('data-precio')) || 0;
+    
+            let matchesBrand = selectedBrand.length === 0 || selectedBrand.includes(brand);
+            let matchesTransmission = selectedTransmission.length === 0 || selectedTransmission.includes(transmission);
+            let matchesPrice = price <= priceLimit;
+    
+            vehicle.style.display = (matchesBrand && matchesTransmission && matchesPrice) ? 'flex' : 'none';
+        });
+    }
+
+
+    function addToCart(name, price) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.push({ name, price });
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart();
+    }
+
+    function updateCart() {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let cartItemsList = document.getElementById('cart-items-list');
+        let cartButton = document.getElementById('cart');
+
+        if (cartItemsList) {
+            cartItemsList.innerHTML = '';
+            cart.forEach(item => {
+                let li = document.createElement('li');
+                li.textContent = `${item.name} - ${item.price} €`;
+                cartItemsList.appendChild(li);
+            });
+        }
+
+        if (cartButton) {
+            cartButton.textContent = `Carrito (${cart.length})`;
+        }
+    }
+
+    function checkout() {
+        alert('Procediendo al pago');
+        localStorage.removeItem('cart');
+        updateCart();
+    }
+
+    document.addEventListener('DOMContentLoaded', updateCart);
+
+        
+</script>
+
+</body>
+</html>

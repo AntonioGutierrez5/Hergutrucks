@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opiniones sobre el Vehículo</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Fondo degradado oscuro */
+        body {
+            background: linear-gradient(to right, #000428, #004e92);
+            color: #fff;
+            font-family:courirer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        /* Título principal */
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f2f2f2;
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Diseño de tarjetas de reseñas */
+        .review-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            text-align: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .star-rating {
+            color: #FFD700;
+            font-size: 1.7rem;
+            margin-bottom: 8px;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            color: #a8d0e6;
+        }
+
+        /* Diseño de comentarios de usuario */
+        .comentario-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Diseño del formulario de comentario */
+        .formulario-comentario h3 {
+            font-size: 1.8rem;
+            color: #f2f2f2;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .formulario-comentario input, .formulario-comentario textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #f2f2f2;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .formulario-comentario input:focus, .formulario-comentario textarea:focus {
+            border-color: #ffd700;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .formulario-comentario button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            background: #ffd700;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .formulario-comentario button:hover {
+            background: #f2c500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Título de la sección -->
+        <h2 class="section-title">Opiniones de Clientes</h2>
+
+        <!-- Reseñas destacadas -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="review-card">
+                    <p class="star-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+                    <p>"Servicio de calidad. Los vehículos están en perfecto estado y el proceso fue rápido y fácil."</p>
+                    <p class="reviewer-name">Ana Martínez</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="review-card">
+                    <p class="star-rating">&#9733;&#9733;&#9733;&#9733;&#9734;</p>
+                    <p>"Muy recomendable. Atención personalizada y buenos precios. Volveré seguro."</p>
+                    <p class="reviewer-name">José Fernández</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comentarios de los usuarios -->
+        <section id="comentarios-section" class="mt-5">
+            <h2 class="section-title text-center">Apartado de comentarios</h2>
+            <div id="comentarios">
+                <!-- Aquí se cargarán los comentarios -->
+            </div>
+            <div id="no-comentarios" class="text-center" style="display: none;">Aún no hay comentarios.</div>
+        </section>
+
+        <!-- Formulario para agregar un comentario -->
+        <section class="formulario-comentario mt-5">
+            <h3>Añadir un Comentario</h3>
+            <form id="comentarioForm">
+                <input type="text" id="nombre" placeholder="Nombre" required>
+                <textarea id="mensaje" rows="4" placeholder="Escribe tu comentario aquí..." required></textarea>
+                <button type="submit">Enviar Comentario</button>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const comentariosDiv = document.getElementById('comentarios');
+            const noComentarios = document.getElementById('no-comentarios');
+
+            // Agregar comentario al HTML
+            function agregarComentarioAlHTML(data) {
+                const comentarioHTML = `
+                    <div class="comentario-card mb-3" id="comentario-${data.id}">
+                        <p class="usuario-nombre">${data.nombre}</p>
+                        <p>${data.mensaje}</p>
+                    </div>`;
+                comentariosDiv.insertAdjacentHTML('beforeend', comentarioHTML);
+                comentariosDiv.style.display = 'block';
+                noComentarios.style.display = 'none';
+            }
+
+            // Enviar comentario usando fetch
+            document.getElementById('comentarioForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const nombre = document.getElementById('nombre').value;
+                const mensaje = document.getElementById('mensaje').value;
+
+                fetch('/opiniones/add/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ nombre, mensaje })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('comentarioForm').reset();
+                    agregarComentarioAlHTML(data);
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+</body>
+</html>

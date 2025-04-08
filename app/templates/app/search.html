@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+{% block content %}
+  <h2>Resultados de búsqueda para "{{ query }}"</h2>
+  {% for resultado in resultados %}
+    <div class="search-result">
+      <h3>{{ resultado.nombre }}</h3>
+      <p>{{ resultado.descripcion }}</p>
+      <!-- Agrega más detalles según sea necesario -->
+    </div>
+  {% empty %}
+    <p>No se encontraron resultados para "{{ query }}"</p>
+  {% endfor %}
+{% endblock %}

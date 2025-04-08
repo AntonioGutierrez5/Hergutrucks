@@ -1,0 +1,57 @@
+{% block content %}
+<div class="container text-center mt-5">
+    <!-- Mensaje de alerta -->
+    <div class="alert alert-warning d-inline-block px-4 py-4 rounded-lg shadow-lg" role="alert" style="background-color: #fffae6;">
+        <h2 class="mb-3 text-primary"><i class="fas fa-exclamation-circle"></i> No se encontraron resultados</h2>
+        <p class="text-muted">Tu búsqueda: <strong>"{{ consulta }}"</strong> no coincide con ningún vehículo.</p>
+        <p class="text-muted">Prueba con otra palabra clave o selecciona una opción:</p>
+    </div>
+
+    <!-- Categorías Disponibles -->
+    <div class="card mx-auto mt-5 shadow-lg" style="max-width: 420px; border-radius: 12px; background-color: #f8f9fa;">
+        <div class="card-body">
+            <h5 class="card-title text-center mb-4 text-uppercase" style="color: #007bff;">Categorías Disponibles</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex align-items-center border-0">
+                    <i class="fas fa-truck me-3 text-primary"></i>
+                    <a href="{% url 'cabezas' %}" class="text-decoration-none text-dark">Cabezas Tractoras</a>
+                </li>
+                <li class="list-group-item d-flex align-items-center border-0">
+                    <i class="fas fa-snowflake me-3 text-info"></i>
+                    <a href="{% url 'frigorifico' %}" class="text-decoration-none text-dark">Frigoríficos</a>
+                </li>
+                <li class="list-group-item d-flex align-items-center border-0">
+                    <i class="fas fa-tint me-3 text-success"></i>
+                    <a href="{% url 'cisterna' %}" class="text-decoration-none text-dark">Cisternas</a>
+                </li>
+                <li class="list-group-item d-flex align-items-center border-0">
+                    <i class="fas fa-industry me-3 text-warning"></i>
+                    <a href="{% url 'hormigonera' %}" class="text-decoration-none text-dark">Hormigoneras</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Contador de redirección -->
+    <p class="mt-4 text-muted">Redirigiendo a la página principal en <span id="contador" class="fw-bold text-danger">5</span> segundos...</p>
+
+    <!-- Botón de redirección manual -->
+    <a href="{% url 'index' %}" class="btn btn-primary mt-4 px-5 py-3 rounded-pill shadow-lg">
+        <i class="fas fa-home"></i> Volver al inicio
+    </a>
+</div>
+
+<script>
+    let tiempo = 5;
+    let contador = document.getElementById("contador");
+
+    setInterval(function() {
+        if (tiempo > 1) {
+            tiempo--;
+            contador.innerText = tiempo;
+        } else {
+            window.location.href = "{% url 'index' %}";
+        }
+    }, 1000);
+</script>
+{% endblock %}
