@@ -106,3 +106,14 @@ class Comentario(models.Model):
 class LogoutView(DjangoLogoutView):
     next_page = reverse_lazy('index')
 
+
+class ClienteComentario(models.Model):
+    nombre = models.CharField(max_length=100)
+    email = models.EmailField(default='example@ejemplo.com')  # Valor por defecto
+    comentario = models.TextField()
+    aprobado = models.BooleanField(default=False)  # Campo booleano para aprobación
+    fecha_creacion = models.DateTimeField(auto_now_add=True)  # Fecha de creación
+
+
+    def __str__(self):
+        return self.nombre

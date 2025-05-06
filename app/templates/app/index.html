@@ -9,6 +9,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="{% static 'js/scripts.js' %}"></script>
     <style>
         /* Estilos generales del body */
         body {
@@ -359,8 +360,7 @@
             <li><a class="dropdown-item" href="{% url 'frigorifico' %}?tipo=frigorifico">Frigorífico</a></li>
             <li><a class="dropdown-item" href="{% url 'cisterna' %}?tipo=cisterna">Cisterna</a></li>
             <li><a class="dropdown-item" href="{% url 'hormigonera' %}?tipo=hormigonera">Hormigonera</a></li>
-            <li><a class="dropdown-item" href="{% url 'reservar-vehiculo' %}?tipo=reservar-vehiculo">Reservas</a></li>
-
+            <li><a class="dropdown-item" href="{% url 'lista_comentarios' %}?comentarios">Comentarios</a></li>
         </ul>
     </div>
 
@@ -530,30 +530,40 @@
 </section>
 
 
-<!-- Sección de Reserva de Vehículos -->
-<section class="py-5">
+
+{% block content %}
+<!-- Sección de Comentarios -->
+<section class="py-5 bg-light">
     <div class="container text-center">
-        <h2 class="section-title">Reserva de Vehículos</h2>
+        <h2 class="section-title text-primary mb-4">¿Qué dicen nuestros clientes?</h2>
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <a href="reservas/" class="text-decoration-none">
-                    <div class="card service-card shadow-lg border-0">
-                        <div class="card-body text-center py-5">
-                            <div class="icon-container mb-3">
-                                <i class="fas fa-calendar-check fa-3x text-primary"></i>
+            <div class="col-md-8">
+                <div class="testimonial-container">
+                    {% if comentarios_principales %}
+                        {% for comentario in comentarios_principales %}
+                            <div class="card shadow-sm border-0 mb-3">
+                                <div class="card-body py-4">
+                                    <p class="card-text text-muted">
+                                        "{{ comentario.comentario }}"
+                                    </p>
+                                    <p class="blockquote-footer mt-2">
+                                        - {{ comentario.nombre }}, <cite title="Fuente del comentario">Cliente</cite>
+                                    </p>
+                                </div>
                             </div>
-                            <h3 class="card-title text-dark">Reserva tu Vehículo</h3>
-                            <p class="card-text text-muted">
-                                Elige el camión que mejor se adapte a tus necesidades y resérvalo en unos pocos clics.
-                            </p><br>
-                            <a href="{% url 'reservar-vehiculo' %}" class="btn btn-custom">Reservar Ahora</a>
-                        </div>
-                    </div>
-                </a>
+                        {% endfor %}
+                    {% else %}
+                    {% endif %}
+
+                    <a href="{% url 'lista_comentarios' %}" class="btn btn-outline-primary mt-3">Ver comentarios</a>
+                    <a href="{% url 'agregar_comentario' %}" class="btn btn-primary mt-3 ms-2">Deja tu comentario</a>
+                </div>
             </div>
         </div>
     </div>
 </section>
+{% endblock %}
+
 
 
 
@@ -619,11 +629,6 @@
 
 <footer class="bg-dark text-white text-center py-4">
     <p>© 2025 HerguTrucks | Todos los derechos reservados</p>
-    <div>
-        <a href="#" class="text-white mx-2"><i class="fab fa-facebook"></i></a>
-        <a href="#" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
-        <a href="#" class="text-white mx-2"><i class="fab fa-instagram"></i></a>
-    </div>
 </footer>
     
     <!-- Bootstrap JS and dependencies -->
@@ -631,6 +636,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 </html>

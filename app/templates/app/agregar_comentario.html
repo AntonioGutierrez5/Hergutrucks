@@ -1,0 +1,54 @@
+{% extends 'app/index.html' %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-primary text-center mb-4">Deja tu comentario</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_nombre" class="form-label">Nombre</label>
+                        <input type="text" name="nombre" class="form-control" id="id_nombre" value="{{ formulario.nombre.value|default_if_none:'' }}">
+                        {% if formulario.nombre.errors %}
+                            <div class="text-danger small">{{ formulario.nombre.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Correo electrónico (opcional)</label>
+                        <input type="email" name="email" class="form-control" id="id_email" value="{{ formulario.email.value|default_if_none:'' }}">
+                        {% if formulario.email.errors %}
+                            <div class="text-danger small">{{ formulario.email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_comentario" class="form-label">Comentario</label>
+                        <textarea name="comentario" class="form-control" id="id_comentario">{{ formulario.comentario.value|default_if_none:'' }}</textarea>
+                        {% if formulario.comentario.errors %}
+                            <div class="text-danger small">{{ formulario.comentario.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Enviar comentario</button>
+                        <a href="{% url 'lista_comentarios' %}" class="btn btn-outline-secondary">Ver todos los comentarios</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

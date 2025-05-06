@@ -1,24 +1,17 @@
 # reservas/forms.py
 from django import forms
-from .models import Reserva, Comentario, TipoVehiculo
+from .models import ClienteComentario
 
 
-class ReservaForm(forms.ModelForm):
+
+class FormularioComentario(forms.ModelForm):
     class Meta:
-        model = Reserva
-        fields = ['vehiculo', 'fecha_inicio', 'fecha_fin', 'tipo_vehiculo']
-
-    tipo_vehiculo = forms.ModelChoiceField(queryset=TipoVehiculo.objects.all(), required=True)
-
-
-class ComentarioForm(forms.ModelForm):
-    class Meta:
-        model = Comentario
-        fields = ['nombre_cliente', 'mensaje']
+        model = ClienteComentario  # Usa el nombre correcto del modelo
+        fields = ['nombre', 'email', 'comentario']
         widgets = {
-            'nombre_cliente': forms.TextInput(attrs={'placeholder': 'Tu nombre'}),
-            'mensaje': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Escribe tu comentario aquí'}),
+            'comentario': forms.Textarea(attrs={'rows': 4}),
         }
+
 
 
 class BuscarVehiculoForm(forms.Form):

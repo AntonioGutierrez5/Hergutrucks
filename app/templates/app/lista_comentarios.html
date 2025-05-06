@@ -1,0 +1,29 @@
+{% extends 'app/index.html' %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-primary text-center mb-4">Comentarios de clientes</h2>
+        {% if comentarios %}
+            <div class="row">
+                {% for comentario in comentarios %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ comentario.nombre }}</h5>
+                                <p class="card-text">{{ comentario.comentario }}</p>
+                                <p class="card-subtitle text-muted small">{{ comentario.fecha|date:"d/m/Y H:i" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center">Aún no hay comentarios.</p>
+        {% endif %}
+        <div class="text-center mt-4">
+            <a href="{% url 'agregar_comentario' %}" class="btn btn-primary">Deja tu comentario</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

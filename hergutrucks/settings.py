@@ -1,4 +1,3 @@
-
 """
 Django settings for hergutrucks project.
 
@@ -12,9 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -63,17 +63,18 @@ MESSAGE_TAGS = {
 
 ROOT_URLCONF = 'hergutrucks.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],  # Asegúrate de incluir esto
-        'APP_DIRS': True,
+        'DIRS': [],  # Deja esta lista vacía
+        'APP_DIRS': True,  # Asegúrate de que esto esté en True
         'OPTIONS': {
             'context_processors': [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -81,7 +82,7 @@ TEMPLATES = [
 
 LOGIN_URL = 'login'  # URL a la que se redirige a los usuarios no autenticados
 LOGIN_REDIRECT_URL = 'index'  # URL a la que se redirige a los usuarios después de iniciar sesión
-LOGOUT_REDIRECT_URL = 'index'  
+LOGOUT_REDIRECT_URL = 'index'
 
 WSGI_APPLICATION = 'hergutrucks.wsgi.application'
 
@@ -92,11 +93,11 @@ WSGI_APPLICATION = 'hergutrucks.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Usa os.path.join() para construir la ruta
     }
 }
 
-BASE_DIR / 'app/templates'
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -131,8 +132,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-import os
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'app/static')]
@@ -151,7 +150,3 @@ REST_FRAMEWORK = {
 }
 
 
-try:
-    from settings_local import *
-except ImportError:
-    pass

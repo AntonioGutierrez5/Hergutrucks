@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TipoVehiculo, Vehiculo, Reserva, Comentario
+from .models import TipoVehiculo, Vehiculo, Comentario, ClienteComentario
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
@@ -17,12 +17,6 @@ class VehiculoAdmin(admin.ModelAdmin):
     ordering = ('tipo',)  # No uses 'disponible' aquí
     list_filter = ('estado',)  # No uses 'disponible' aquí
 
-@admin.register(Reserva)
-class ReservaAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'vehiculo', 'fecha_inicio', 'fecha_fin')  # 'vehiculo' y 'cliente' son atributos del modelo Reserva
-    search_fields = ('cliente__username', 'vehiculo__tipo__nombre', 'trayecto')  # Se cambió 'vehiculo__tipo__tipo' por 'vehiculo__tipo__nombre'
-    ordering = ('fecha_inicio',)
-
 
 @admin.register(Comentario)
 class ComentarioAdmin(admin.ModelAdmin):
@@ -36,3 +30,19 @@ class ComentarioAdmin(admin.ModelAdmin):
         queryset.update(aprobado=True)
         self.message_user(request, "Comentarios aprobados exitosamente.")
     aprobar_comentarios.short_description = "Aprobar comentarios seleccionados"
+
+
+
+@admin.register(ClienteComentario)
+class ComentarioAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'email', 'get_aprobado', 'get_fecha_creacion')
+    list_filter = ('aprobado',)
+    search_fields = ('nombre', 'comentario')
+
+    def get_aprobado(self, obj):
+        return obj.aprobado
+    get_aprobado.admin_order_field = 'aprobado'  # Permite ordenar por este campo
+
+    def get_fecha_creacion(self, obj):
+        return obj.fecha_creacion
+    get_fecha_creacion.admin_order_field = 'fecha_creacion'
