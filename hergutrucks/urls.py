@@ -18,8 +18,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from wagtail.admin import urls as wagtailadmin_urls
+from wagtail import urls as wagtail_urls
+from wagtail.documents import urls as wagtaildocs_urls
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app.urls')),  # Incluye las rutas de la app de reservas
+    
+    path('wagtail-admin/', include(wagtailadmin_urls)),
+    path('documents/', include(wagtaildocs_urls)),
+    path('cms/', include(wagtail_urls)),
 ]
+
 
